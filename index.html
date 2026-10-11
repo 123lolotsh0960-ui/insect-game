@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+  
+  البانر
+  body {
+  padding-bottom: 60px; /* مسافة للبانرات التحت */
+}
+
+/* بانر تحت المنيو */
+#bannerMenu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  display: block; /* ظاهر في المنيو */
+}
+
+/* بانر تحت القيم */
+#bannerGame {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  display: none; /* مخفي في المنيو */
+}
+  
+  
+  
+  
+  
+  
+  
+  /* مسافة فوق للبانرين */
+body {
+  padding-top: 120px; /* 60 + 60 للبانرين */
+}
+
+/* البانر الاول اقصى فوق */
+#bannerTop1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* عشان نعرف مكان التاني */
+  z-index: 999;
+  display: block; /* ظاهر في المنيو */
+}
+
+/* البانر التاني لاصق تحتو طوالي */
+#bannerTop2 {
+  position: fixed;
+  top: 60px; /* لاصق في الاول */
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: 999;
+  display: block; /* ظاهر في المنيو */
+}
+  
+  
+    body { margin:0; background:linear-gradient(to bottom, #0a1a0a, #1a2a1a); overflow:hidden; touch-action:none; }
+    canvas { display:block; }
+    #joystick { position:absolute; background:rgba(255,255,255,0.15); border-radius:50%; touch-action:none; display:none; backdrop-filter:blur(2px); }
+    #stick { position:absolute; background:rgba(255,255,255,0.9); border-radius:50%; pointer-events:none; }
+    #shoot { position:absolute; background:rgba(255,0,0,0.4); border-radius:50%; border:2px solid rgba(255,255,255,0.3); color:white; font-weight:bold; font-size:18px; touch-action:none; display:none; backdrop-filter:blur(2px); }
+    #pauseBtn { position:absolute; top:15px; right:15px; width:45px; height:45px; background:rgba(0,0,0,0.5); border:2px solid rgba(255,255,255,0.5); border-radius:8px; color:white; font-size:20px; font-weight:bold; display:none; z-index:10; backdrop-filter:blur(3px); }
+    #hud { position:absolute; top:15px; left:50%; transform:translateX(-50%); color:white; font-size:14px; font-family:Arial; text-shadow:1px 1px 2px black; text-align:center; background:rgba(0,0,0,0.4); padding:8px 15px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); min-width:140px; display:none; backdrop-filter:blur(3px); }
+    #hpRow { display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:4px; }
+    #hpBarContainer { width:80px; height:8px; background:rgba(50,50,50,0.6); border:1px solid rgba(255,255,255,0.3); border-radius:3px; overflow:hidden; }
+    #hpBar { width:100%; height:100%; background:white; transition:width 0.2s; }
+.shake { animation: shake 0.3s; }
+    @keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(-3px)} 50%{transform:translateX(3px)} 75%{transform:translateX(-3px)} 100%{transform:translateX(0)} }
+    #mainMenu { position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg, #1a1a1a, #000); display:flex; justify-content:center; align-items:center; flex-direction:column; color:white; font-family:Arial; z-index:100; }
+    #mainMenu h1 { font-size:52px; color:white; margin:0 0 10px 0; text-shadow:3px 3px 6px red; letter-spacing:3px; }
+    #mainMenu p { font-size:18px; margin:0 0 40px 0; color:#aaa; }
+.menuBtn { margin:10px; padding:18px 50px; font-size:22px; background:linear-gradient(90deg, #333, #111); border:2px solid #555; border-radius:12px; color:white; font-weight:bold; cursor:pointer; width:280px; transition:0.2s; }
+.menuBtn:hover { background:linear-gradient(90deg, #444, #222); transform:scale(1.05); }
+    #startBtn { background:linear-gradient(90deg, red, darkred); border-color:red; }
+
+    #settingsScreen { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:none; color:white; font-family:Arial; z-index:101; }
+    #settingsTabs { display:flex; background:#111; border-bottom:2px solid #333; }
+.tabBtn { flex:1; padding:15px; background:#222; border:none; color:#aaa; font-size:16px; font-weight:bold; cursor:pointer; }
+.tabBtn.active { background:#333; color:white; border-bottom:3px solid red; }
+    #settingsContent { height:calc(70% - 50px); padding:20px; overflow-y:auto; }
+.tabContent { display:none; }
+.tabContent.active { display:block; }
+    #settingsScreen h1 { font-size:28px; text-align:center; margin:10px 0 20px 0; }
+.settingRow { display:flex; align-items:center; justify-content:space-between; margin:15px 10px; font-size:16px; }
+.settingRow input[type=range] { width:130px; }
+    #settingsPreview { position:absolute; bottom:80px; left:0; width:100%; height:calc(30% - 80px); background:rgba(20,20,20,0.9); border-top:2px solid #444; }
+    #previewText { position:absolute; top:5px; left:50%; transform:translateX(-50%); font-size:14px; color:#aaa; }
+.saveBtn { position:absolute; bottom:15px; left:50%; transform:translateX(-50%); padding:15px 40px; font-size:20px; background:linear-gradient(90deg, #00a800, #007000); border:2px solid #00ff00; border-radius:10px; color:white; font-weight:bold; cursor:pointer; width:260px; }
+
+    #previewJoystick { position:absolute; background:rgba(255,255,255,0.2); border-radius:50%; border:2px solid rgba(255,255,255,0.3); touch-action:none; }
+    #previewStick { position:absolute; background:rgba(255,255,255,0.8); border-radius:50%; pointer-events:none; }
+    #previewShoot { position:absolute; background:rgba(255,0,0,0.4); border-radius:50%; border:2px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-weight:bold; touch-action:none; }
+
+    #pauseScreen { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; flex-direction:column; color:white; font-family:Arial; z-index:99; }
+    #pauseScreen h1 { font-size:48px; margin:0 0 30px 0; }
+    #pauseScreen button { margin:10px; padding:15px 50px; font-size:22px; background:#333; border:2px solid white; border-radius:10px; color:white; font-weight:bold; cursor:pointer; width:250px; }
+    #gameOver { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; flex-direction:column; color:white; font-family:Arial; z-index:99; }
+    #gameOver h1 { font-size:48px; color:red; margin:0; }
+    #gameOver p { font-size:24px; margin:10px 0; }
+    #gameOver button { margin-top:20px; padding:15px 40px; font-size:22px; background:red; border:none; border-radius:10px; color:white; font-weight:bold; cursor:pointer; }
+  
+
+/* الايقونة الجانبية للسلاح المجاني */
+#freeGun {
+  position: absolute;
+  top: 100px;       /* بعدها من فوق */
+  right: 10px;      /* لاصقة في اليمين */
+  width: 70px;
+  height: 70px;
+  background: gold;
+  border-radius: 15px;
+  border: 3px solid red;
+  text-align: center;
+  font-size: 10px;
+  color: black;
+  font-weight: bold;
+  z-index: 999;     /* عشان تجي فوق اللعبة */
+}
+#freeGun img { 
+  width: 40px; 
+  height: 40px; 
+  margin-top: 5px; 
+}
+
+
+</style>
+</head>
+<body>
+
+
+<!-- بانر 1: تحت المنيو فقط -->
+<div id="bannerMenu">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"  <!-- ايديك -->
+     data-ad-slot="111"  <!-- ايدي بانر المنيو -->
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- بانر 2: تحت القيم فقط -->
+<div id="bannerGame">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"  <!-- نفس ايديك -->
+     data-ad-slot="222222"  <!-- ايدي بانر القيم مختلف -->
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- بانر 1: اقصى فوق -->
+<div id="bannerTop1">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"  <!-- ايديك -->
+     data-ad-slot="111"  <!-- ايدي البانر الاول -->
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- بانر 2: لاصق تحتو -->
+<div id="bannerTop2">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"  <!-- نفس ايديك -->
+     data-ad-slot="222222"  <!-- ايدي البانر التاني مختلف -->
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- ايقونة السلاح المجاني -->
+<div id="freeGun" onclick="watchAd()">
+ <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='red'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E">
+ احصل<br>سلاح مجاني
+</div>
+
+
+<canvas id="game"></canvas>
+
+<!-- اغنيتين -->
+<audio id="menuMusic" loop>
+  <source src="menu.mp3" type="audio/mpeg">
+</audio>
+<audio id="gameMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div id="joystick"><div id="stick"></div></div>
+<button id="shoot">FIRE</button>
+<button id="pauseBtn" onclick="togglePause()">||</button>
+
+<div id="hud">
+  <div id="hpRow">
+    <span>HP:</span>
+    <div id="hpBarContainer"><div id="hpBar"></div></div>
+    <span id="hpText">200/200</span>
+  </div>
+  <div id="scoreText">Score: 0</div>
+</div>
+
+<div id="mainMenu">
+  <h1>ASSIN SURVIVAL</h1>
+  <p>Kill enemies and survive!</p>
+  <button class="menuBtn" id="startBtn" onclick="startGame()">START GAME</button>
+  <button class="menuBtn" onclick="openSettings()">SETTINGS</button>
+</div>
+
+<div id="settingsScreen">
+  <div id="settingsTabs">
+    <button class="tabBtn active" onclick="switchTab('general')">عام</button>
+    <button class="tabBtn" onclick="switchTab('controls')">التحكم في الازرار</button>
+  </div>
+
+  <div id="settingsContent">
+    <div id="generalTab" class="tabContent active">
+      <h1>الاعدادات العامة</h1>
+      <div class="settingRow">
+        <span>صوت الشاشة الرئيسية</span>
+        <input type="range" id="menuVolume" min="0" max="100" value="40" oninput="changeMenuVolume()">
+      </div>
+      <div class="settingRow">
+        <span>صوت اللعبة</span>
+        <input type="range" id="gameVolume" min="0" max="100" value="40" oninput="changeGameVolume()">
+      </div>
+      <div class="settingRow">
+        <span>الصعوبة</span>
+        <select id="difficultySelect">
+          <option value="easy">سهل</option>
+          <option value="normal" selected>متوسط</option>
+          <option value="hard">صعب</option>
+        </select>
+      </div>
+      <button class="saveBtn" onclick="saveGeneralSettings()">حفظ والعودة</button>
+    </div>
+
+    <div id="controlsTab" class="tabContent">
+      <h1>التحكم في الازرار</h1>
+      <p style="text-align:center; color:#aaa; font-size:14px;">اسحب الازرار في المعاينة لتغير مكانها</p>
+      <div class="settingRow">
+        <span>حجم الجويستك</span>
+        <input type="range" id="joystickSize" min="80" max="160" value="120" oninput="updatePreviewSizes()">
+      </div>
+      <div class="settingRow">
+        <span>حجم زر الاطلاق</span>
+        <input type="range" id="shootSize" min="80" max="140" value="100" oninput="updatePreviewSizes()">
+      </div>
+      <button class="saveBtn" onclick="saveControlSettings()">حفظ والعودة</button>
+    </div>
+  </div>
+
+  <div id="settingsPreview">
+    <div id="previewText">معاينة - اسحب لتغير المكان</div>
+    <div id="previewJoystick"><div id="previewStick"></div></div>
+    <div id="previewShoot">FIRE</div>
+  </div>
+</div>
+
+<div id="pauseScreen">
+  <h1>PAUSED</h1>
+  <button onclick="togglePause()">RESUME</button>
+  <button onclick="goToMenu()">MAIN MENU</button>
+</div>
+
+<div id="gameOver">
+  <h1>GAME OVER</h1>
+  <p id="finalScore">Score: 0</p>
+  <button onclick="goToMenu()">MAIN MENU</button>
+</div>
+
+<script>
+
+function startGame(){
+  gameStarted = true;
+  document.getElementById("startBtn").style.display = "none";
+
+  // اخفي بانر المنيو و ورّي بانر القيم
+  document.getElementById("bannerMenu").style.display = "none";
+  document.getElementById("bannerGame").style.display = "block";
+}
+
+function backToMenu(){
+  gameStarted = false;
+  document.getElementById("startBtn").style.display = "block";
+
+  // ورّي بانر المنيو و اخفي بانر القيم
+  document.getElementById("bannerMenu").style.display = "block";
+  document.getElementById("bannerGame").style.display = "none";
+}
+
+
+
+function startGame(){
+  gameStarted = true;
+  document.getElementById("startBtn").style.display = "none";
+
+  // اخفي البانرين الفوق
+  document.getElementById("bannerTop1").style.display = "none";
+  document.getElementById("bannerTop2").style.display = "none";
+}
+
+// دالة الاعلان
+function watchAd(){
+ alert("حيظهر اعلان 10 ثواني... بعدو بتاخد السلاح الاحمر"); 
+ // هنا بعدين بنربطو باعلان AdMob Rewarded
+ 
+ hasSuperGun = true; // فعل السلاح
+ document.getElementById("freeGun").style.display = "none"; // خفي الايقونة
+ 
+ // بعد 30 ثانية رجع كل شي
+ setTimeout(() => { 
+   hasSuperGun = false; 
+   document.getElementById("freeGun").style.display = "block"; 
+ }, 30000); 
+}
+
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const menuMusic = document.getElementById("menuMusic");
+const gameMusic = document.getElementById("gameMusic");
+menuMusic.volume = 0.4;
+gameMusic.volume = 0.4;
+
+const WORLD_WIDTH = 3000;
+const WORLD_HEIGHT = 3000;
+const TILE_SIZE = 60;
+
+let gameSettings = {
+  menuVolume: 40,
+  gameVolume: 40,
+  difficulty: 'normal',
+  joystickSize: 120,
+  shootSize: 100,
+  joystickX: 40,
+  joystickY: 40,
+  shootX: 50,
+  shootY: 50
+};
+
+function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize(); window.addEventListener("resize", resize);
+
+let camera = {x: 0, y: 0};
+let player = {x: WORLD_WIDTH/2, y: WORLD_HEIGHT/2, speed: 4, hp:200, maxHp:200, angle:0};
+let bullets = []; let enemies = []; let groundTiles = [];
+let dx = 0, dy = 0; let score = 0; let spawnTimer = 0;
+let isShooting = false; let shootCooldown = 0; let joystickID = null;
+let gameRunning = false; let isPaused = false; let lastHp = 200;
+let activeDrag = null;
+
+function generateGround(){
+  groundTiles = [];
+  for(let x = 0; x < WORLD_WIDTH; x += TILE_SIZE){
+    for(let y = 0; y < WORLD_HEIGHT; y += TILE_SIZE){
+      let type = Math.random() < 0.75? "grass" : "dirt";
+      groundTiles.push({x:x, y:y, type:type, shade: Math.random()*0.2 + 0.8, detail: Math.random()});
+    }
+  }
+}
+generateGround();
+
+function updateCamera(){
+  camera.x = player.x - canvas.width / 2;
+  camera.y = player.y - canvas.height / 2;
+  camera.x = Math.max(0, Math.min(WORLD_WIDTH - canvas.width, camera.x));
+  camera.y = Math.max(0, Math.min(WORLD_HEIGHT - canvas.height, camera.y));
+}
+
+// تشغيل موسيقى المنيو اول ما تفتح
+window.addEventListener('load', () => {
+  menuMusic.play().catch(e => console.log("Music blocked:", e));
+});
+
+function changeMenuVolume(){
+  let vol = document.getElementById("menuVolume").value;
+  gameSettings.menuVolume = vol;
+  menuMusic.volume = vol / 100;
+  if(vol == 0) menuMusic.pause(); else menuMusic.play();
+}
+
+function changeGameVolume(){
+  let vol = document.getElementById("gameVolume").value;
+  gameSettings.gameVolume = vol;
+  gameMusic.volume = vol / 100;
+  if(vol == 0) gameMusic.pause(); else if(gameRunning) gameMusic.play();
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.tabBtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tabContent').forEach(c => c.classList.remove('active'));
+  if(tab === 'general'){
+    document.querySelectorAll('.tabBtn')[0].classList.add('active');
+    document.getElementById('generalTab').classList.add('active');
+  } else {
+    document.querySelectorAll('.tabBtn')[1].classList.add('active');
+    document.getElementById('controlsTab').classList.add('active');
+    setupPreview();
+  }
+  if(gameSettings.menuVolume > 0) menuMusic.play();
+}
+
+function applySettings(){
+  let joySize = gameSettings.joystickSize;
+  let shootSize = gameSettings.shootSize;
+
+  joystick.style.width = joySize + "px";
+  joystick.style.height = joySize + "px";
+  stick.style.width = joySize/2 + "px";
+  stick.style.height = joySize/2 + "px";
+  stick.style.left = joySize/4 + "px";
+  stick.style.top = joySize/4 + "px";
+  joystick.style.left = gameSettings.joystickX + "px";
+  joystick.style.bottom = gameSettings.joystickY + "px";
+
+  shoot.style.width = shootSize + "px";
+  shoot.style.height = shootSize + "px";
+  shoot.style.fontSize = shootSize/5 + "px";
+  shoot.style.right = gameSettings.shootX + "px";
+  shoot.style.bottom = gameSettings.shootY + "px";
+}
+
+function openSettings(){
+  document.getElementById("mainMenu").style.display = "none";
+  document.getElementById("settingsScreen").style.display = "block";
+  document.getElementById("menuVolume").value = gameSettings.menuVolume;
+  document.getElementById("gameVolume").value = gameSettings.gameVolume;
+  document.getElementById("difficultySelect").value = gameSettings.difficulty;
+  document.getElementById("joystickSize").value = gameSettings.joystickSize;
+  document.getElementById("shootSize").value = gameSettings.shootSize;
+}
+
+function saveGeneralSettings(){
+  gameSettings.difficulty = document.getElementById("difficultySelect").value;
+  closeSettingsMenu();
+}
+
+function saveControlSettings(){
+  gameSettings.joystickSize = parseInt(document.getElementById("joystickSize").value);
+  gameSettings.shootSize = parseInt(document.getElementById("shootSize").value);
+  applySettings();
+  closeSettingsMenu();
+}
+
+function closeSettingsMenu(){
+  document.getElementById("settingsScreen").style.display = "none";
+  document.getElementById("mainMenu").style.display = "flex";
+  if(gameSettings.menuVolume > 0) menuMusic.play();
+}
+
+function updatePreviewSizes(){
+  gameSettings.joystickSize = parseInt(document.getElementById("joystickSize").value);
+  gameSettings.shootSize = parseInt(document.getElementById("shootSize").value);
+  if(document.getElementById("controlsTab").classList.contains('active')){
+    setupPreview();
+  }
+}
+
+function setupPreview(){
+  let pJoy = document.getElementById("previewJoystick");
+  let pStick = document.getElementById("previewStick");
+  let pShoot = document.getElementById("previewShoot");
+  let joySize = gameSettings.joystickSize;
+  let shootSize = gameSettings.shootSize;
+
+  pJoy.style.width = joySize + "px";
+  pJoy.style.height = joySize + "px";
+  pJoy.style.left = gameSettings.joystickX + "px";
+  pJoy.style.bottom = gameSettings.joystickY + "px";
+  pStick.style.width = joySize/2 + "px";
+  pStick.style.height = joySize/2 + "px";
+  pStick.style.left = joySize/4 + "px";
+  pStick.style.top = joySize/4 + "px";
+
+  pShoot.style.width = shootSize + "px";
+  pShoot.style.height = shootSize + "px";
+  pShoot.style.fontSize = shootSize/5 + "px";
+  pShoot.style.right = gameSettings.shootX + "px";
+  pShoot.style.bottom = gameSettings.shootY + "px";
+
+  makeDraggable(pJoy, 'joystick');
+  makeDraggable(pShoot, 'shoot');
+}
+
+function makeDraggable(el, type){
+  el.addEventListener('touchstart', e => {
+    activeDrag = type;
+    e.stopPropagation();
+    e.preventDefault();
+  });
+  el.addEventListener('mousedown', e => {
+    activeDrag = type;
+    e.stopPropagation();
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchmove', e => {
+    if(activeDrag!== type) return;
+    let touch = e.touches[0];
+    moveElement(touch.clientX, touch.clientY, type);
+    e.preventDefault();
+  }, {passive:false});
+
+  document.addEventListener('mousemove', e => {
+    if(activeDrag!== type) return;
+    moveElement(e.clientX, e.clientY, type);
+  });
+
+  document.addEventListener('touchend', () => { if(activeDrag === type) activeDrag = null; });
+  document.addEventListener('mouseup', () => { if(activeDrag === type) activeDrag = null; });
+}
+
+function moveElement(x, y, type){
+  let rect = document.getElementById("settingsPreview").getBoundingClientRect();
+  let posX = x - rect.left;
+  let posY = rect.bottom - y;
+
+  if(type === 'joystick'){
+    gameSettings.joystickX = Math.max(0, Math.min(rect.width - gameSettings.joystickSize, posX));
+    gameSettings.joystickY = Math.max(0, Math.min(rect.height - gameSettings.joystickSize, posY));
+    let el = document.getElementById("previewJoystick");
+    el.style.left = gameSettings.joystickX + "px";
+    el.style.bottom = gameSettings.joystickY + "px";
+  }
+  if(type === 'shoot'){
+    gameSettings.shootX = Math.max(0, Math.min(rect.width - gameSettings.shootSize, rect.width - posX));
+    gameSettings.shootY = Math.max(0, Math.min(rect.height - gameSettings.shootSize, posY));
+    let el = document.getElementById("previewShoot");
+    el.style.right = gameSettings.shootX + "px";
+    el.style.bottom = gameSettings.shootY + "px";
+  }
+}
+
+function startGame(){
+  document.getElementById("mainMenu").style.display = "none";
+  document.getElementById("settingsScreen").style.display = "none";
+  applySettings();
+  document.getElementById("joystick").style.display = "block";
+  document.getElementById("shoot").style.display = "block";
+  document.getElementById("hud").style.display = "block";
+  document.getElementById("pauseBtn").style.display = "block";
+  restartGame();
+  gameRunning = true;
+  isPaused = false;
+
+  // نوقف المنيو ونشغل اللعبة
+  menuMusic.pause();
+  menuMusic.currentTime = 0;
+  if(gameSettings.gameVolume > 0){
+    gameMusic.currentTime = 0;
+    gameMusic.play().catch(e => console.log("Music blocked:", e));
+  }
+
+  let enemyCount = gameSettings.difficulty === 'easy'? 5 : gameSettings.difficulty === 'hard'? 12 : 8;
+  for(let i=0; i<enemyCount; i++){ spawnEnemy(); }
+}
+
+function togglePause(){
+  if(!gameRunning) return;
+  isPaused =!isPaused;
+  document.getElementById("pauseScreen").style.display = isPaused? "flex" : "none";
+  if(isPaused){
+    dx = 0; dy = 0; isShooting = false;
+    gameMusic.pause();
+  } else {
+    if(gameSettings.gameVolume > 0) gameMusic.play();
+  }
+}
+
+function goToMenu(){
+  document.getElementById("gameOver").style.display = "none";
+  document.getElementById("pauseScreen").style.display = "none";
+  document.getElementById("joystick").style.display = "none";
+  document.getElementById("shoot").style.display = "none";
+  document.getElementById("hud").style.display = "none";
+  document.getElementById("pauseBtn").style.display = "none";
+  document.getElementById("mainMenu").style.display = "flex";
+  gameRunning = false; isPaused = false;
+
+  // نوقف اللعبة ونشغل المنيو
+  gameMusic.pause();
+  gameMusic.currentTime = 0;
+  if(gameSettings.menuVolume > 0){
+    menuMusic.currentTime = 0;
+    menuMusic.play();
+  }
+}
+
+joystick.addEventListener("touchstart", e => {
+  if(isPaused) return;
+  if(joystickID === null){ joystickID = e.changedTouches[0].identifier; updateJoystick(e.changedTouches[0]); }
+});
+joystick.addEventListener("touchmove", e => {
+  if(isPaused) return;
+  for(let touch of e.changedTouches){ if(touch.identifier === joystickID){ updateJoystick(touch); } }
+});
+joystick.addEventListener("touchend", e => {
+  for(let touch of e.changedTouches){ if(touch.identifier === joystickID){ joystickID = null; dx = 0; dy = 0;
+    let size = gameSettings.joystickSize;
+    stick.style.left = size/4 + "px"; stick.style.top = size/4 + "px";
+  } }
+});
+function updateJoystick(touch){
+  let rect = joystick.getBoundingClientRect();
+  let size = gameSettings.joystickSize;
+  dx = (touch.clientX - rect.left - size/2) / (size/2);
+  dy = (touch.clientY - rect.top - size/2) / (size/2);
+  let dist = Math.sqrt(dx*dx + dy*dy);
+  if(dist > 1){ dx /= dist; dy /= dist; }
+  stick.style.left = size/4 + dx*(size/4) + "px";
+  stick.style.top = size/4 + dy*(size/4) + "px";
+  if(dx!== 0 || dy!== 0){ player.angle = Math.atan2(dy, dx); }
+}
+
+shoot.addEventListener("touchstart", e => { if(!isPaused){ isShooting = true; } e.preventDefault(); });
+shoot.addEventListener("touchend", e => { isShooting = false; e.preventDefault(); });
+
+function shootBullet(){
+  let dirX = dx!== 0? dx : Math.cos(player.angle);
+  let dirY = dy!== 0? dy : Math.sin(player.angle);
+  let length = Math.sqrt(dirX*dirX + dirY*dirY);
+  dirX /= length; dirY /= length;
+  bullets.push({x: player.x, y: player.y, vx: dirX * 14, vy: dirY * 14});
+}
+
+function spawnEnemy(){
+  let dist = 400 + Math.random()*200;
+  let angle = Math.random() * Math.PI * 2;
+  let x = player.x + Math.cos(angle) * dist;
+  let y = player.y + Math.sin(angle) * dist;
+  x = Math.max(50, Math.min(WORLD_WIDTH-50, x));
+  y = Math.max(50, Math.min(WORLD_HEIGHT-50, y));
+  let speed = 0.8 + Math.random()*0.4;
+  if(gameSettings.difficulty === 'hard') speed *= 1.5;
+  if(gameSettings.difficulty === 'easy') speed *= 0.7;
+  enemies.push({x:x, y:y, speed:speed});
+}
+
+function shakeHPBar(){
+  let bar = document.getElementById("hpBarContainer");
+  bar.classList.add("shake");
+  setTimeout(() => bar.classList.remove("shake"), 300);
+}
+
+function updateHUD(){
+  let hpPercent = (player.hp / player.maxHp) * 100;
+  document.getElementById("hpBar").style.width = hpPercent + "%";
+  document.getElementById("hpText").innerText = player.hp + "/" + player.maxHp;
+  document.getElementById("scoreText").innerText = "Score: " + score;
+  if(player.hp < lastHp){ shakeHPBar(); } lastHp = player.hp;
+}
+
+function drawGround(){
+  ctx.globalAlpha = 0.55;
+  for(let tile of groundTiles){
+    if(tile.x + TILE_SIZE < camera.x || tile.x > camera.x + canvas.width) continue;
+    if(tile.y + TILE_SIZE < camera.y || tile.y > camera.y + canvas.height) continue;
+    let sx = tile.x - camera.x;
+    let sy = tile.y - camera.y;
+    let s = tile.shade;
+    if(tile.type === "grass"){
+      ctx.fillStyle = `rgba(${50*s}, ${160*s}, ${50*s}, 0.5)`;
+      ctx.fillRect(sx, sy, TILE_SIZE, TILE_SIZE);
+      if(tile.detail > 0.75){
+        ctx.fillStyle = `rgba(${30*s}, ${120*s}, ${30*s}, 0.25)`;
+        for(let i=0; i<3; i++){
+          ctx.fillRect(sx + Math.random()*TILE_SIZE, sy + Math.random()*TILE_SIZE, 1.5, 1.5);
+        }
+      }
+    } else {
+      ctx.fillStyle = `rgba(${160*s}, ${110*s}, ${60*s}, 0.5)`;
+      ctx.fillRect(sx, sy, TILE_SIZE, TILE_SIZE);
+      if(tile.detail > 0.65){
+        ctx.fillStyle = `rgba(${120*s}, ${85*s}, ${45*s}, 0.25)`;
+        ctx.fillRect(sx + TILE_SIZE/2, sy + TILE_SIZE/2, 2, 2);
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+function restartGame(){
+  player.x = WORLD_WIDTH/2; player.y = WORLD_HEIGHT/2; player.hp = 200;
+  lastHp = 200; bullets = []; enemies = []; score = 0; spawnTimer = 0;
+  updateCamera(); updateHUD();
+}
+
+function gameLoop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drawGround();
+  if(gameRunning &&!isPaused){
+    player.x += dx * player.speed;
+    player.y += dy * player.speed;
+    player.x = Math.max(20, Math.min(WORLD_WIDTH - 20, player.x));
+    player.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, player.y));
+    updateCamera();
+    if(isShooting && shootCooldown <= 0){
+      shootBullet();
+      shootCooldown = 8;
+    }
+    if(shootCooldown > 0) shootCooldown--;
+    spawnTimer++;
+    let spawnRate = gameSettings.difficulty === 'hard'? 50 : gameSettings.difficulty === 'easy'? 90 : 72;
+    if(spawnTimer > spawnRate){ spawnEnemy(); spawnTimer = 0; }
+    ctx.fillStyle = "rgba(255,50,50,0.9)";
+    for(let i=enemies.length-1; i>=0; i--){
+      let e = enemies[i];
+      let angle = Math.atan2(player.y - e.y, player.x - e.x);
+      e.x += Math.cos(angle) * e.speed; e.y += Math.sin(angle) * e.speed;
+      e.x = Math.max(20, Math.min(WORLD_WIDTH - 20, e.x));
+      e.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, e.y));
+      ctx.fillRect(e.x - camera.x - 10, e.y - camera.y - 10, 20, 20);
+      if(Math.abs(e.x - player.x) < 20 && Math.abs(e.y - player.y) < 20){
+        player.hp -= 10; if(player.hp < 0) player.hp = 0;
+        enemies.splice(i,1); updateHUD();
+      }
+    }
+    ctx.fillStyle = "rgba(255,255,0,0.9)";
+    for(let i=bullets.length-1; i>=0; i--){
+      let b = bullets[i]; b.x += b.vx; b.y += b.vy;
+      ctx.fillRect(b.x - camera.x - 3, b.y - camera.y - 3, 6, 6);
+      for(let j=enemies.length-1; j>=0; j--){
+        let e = enemies[j];
+        if(Math.abs(b.x - e.x) < 15 && Math.abs(b.y - e.y) < 15){
+          enemies.splice(j,1); bullets.splice(i,1); score++; updateHUD(); break;
+        }
+      }
+      if(b && (b.x < 0 || b.x > WORLD_WIDTH || b.y < 0 || b.y > WORLD_HEIGHT)){ bullets.splice(i,1); }
+    }
+    if(player.hp <= 0 && gameRunning){
+      gameRunning = false;
+      gameMusic.pause();
+      document.getElementById("finalScore").innerText = "Score: " + score;
+      document.getElementById("gameOver").style.display = "flex";
+      document.getElementById("pauseBtn").style.display = "none";
+    }
+  }
+  ctx.save();
+  ctx.translate(player.x - camera.x, player.y - camera.y);
+  ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(0, 18, 12, 4, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#111"; ctx.fillRect(-6, 5, 5, 12); ctx.fillRect(1, 5, 5, 12);
+  ctx.fillStyle = "black"; ctx.fillRect(-6, 16, 5, 3); ctx.fillRect(1, 16, 5, 3);
+  ctx.fillStyle = "#1a1a1a"; ctx.fillRect(-10, -18, 20, 24);
+  ctx.fillStyle = "#0d0d0d"; ctx.fillRect(-10, -18, 20, 12);
+  ctx.fillStyle = "#4a3c28"; ctx.fillRect(-11, -2, 22, 4);
+  ctx.fillStyle = "#d4af37"; ctx.fillRect(-2, -3, 4, 6);
+  ctx.fillStyle = "#1a1a1a"; ctx.fillRect(-14, -16, 5, 8); ctx.fillRect(9, -16, 5, 8); ctx.fillRect(-16, -14, 6, 16); ctx.fillRect(10, -14, 6, 16);
+  ctx.fillStyle = "#ffdbac"; ctx.fillRect(-15, 0, 4, 4); ctx.fillRect(11, 0, 4, 4);
+  ctx.fillStyle = "#ffdbac"; ctx.beginPath(); ctx.arc(0, -24, 8, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "black"; ctx.beginPath(); ctx.arc(0, -26, 10, Math.PI, 0); ctx.fill(); ctx.fillRect(-10, -26, 20, 6);
+  ctx.fillStyle = "#8b0000"; ctx.beginPath(); ctx.moveTo(-10, -16); ctx.lineTo(10, -16); ctx.lineTo(14, -8); ctx.lineTo(-14, -8); ctx.closePath(); ctx.fill();
+  if(gameRunning &&!isPaused){ ctx.save(); ctx.rotate(player.angle); ctx.fillStyle = "#333"; ctx.fillRect(8, -6, 16, 4); ctx.fillRect(6, -8, 4, 8); ctx.restore(); }
+  ctx.restore();
+  requestAnimationFrame(gameLoop);
+}
+updateHUD(); gameLoop();
+</script>
+</body>
+</html>
