@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>متصفح إنسِكت</title>
+  <style>
+    :root{--green:#16794a;--mint:#eaf7ef;--ink:#16251d;--line:#dce7df;--muted:#718078}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Tahoma,sans-serif;background:#eef5f0;color:var(--ink)}
+    button,input{font:inherit}.app{max-width:760px;min-height:100vh;margin:auto;background:white;box-shadow:0 0 30px #1c49351a}
+    .searchbar{position:sticky;top:0;z-index:20;display:flex;gap:8px;padding:12px;background:#fffffff2;border-bottom:1px solid var(--line)}
+    .address{flex:1;display:flex;align-items:center;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:22px;background:#f7faf8}
+    .address input{width:100%;border:0;outline:0;background:transparent;direction:ltr;text-align:left;color:var(--ink)}
+    .icon{width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:var(--ink);cursor:pointer;font-size:18px}.icon:hover{background:var(--mint)}
+    main{padding:16px}.hero{display:flex;align-items:center;justify-content:space-between}.hero h1{margin:0;font-size:21px}.status{font-size:12px;padding:6px 10px;border-radius:14px;background:var(--mint);color:var(--green)}
+    .section{margin-top:22px}.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.head h2{margin:0;font-size:16px}.link{border:0;background:transparent;color:var(--green);cursor:pointer}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.site{display:flex;flex-direction:column;align-items:center;gap:7px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:4px}
+    .site-icon{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:var(--mint);color:var(--green);font-weight:800;font-size:20px}
+    .card{display:flex;align-items:center;gap:12px;margin-top:8px;padding:12px;border:1px solid var(--line);border-radius:16px}.card-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--mint)}
+    .card-content{flex:1;min-width:0}.card-title{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{margin-top:4px;color:var(--muted);font-size:12px}
+    .download-actions{display:flex;gap:6px}.small{border:1px solid var(--line);border-radius:12px;background:white;color:var(--green);padding:8px 10px;cursor:pointer}
+    .saver{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:16px;background:linear-gradient(135deg,#e8f7ef,#f3f9f5)}
+    .switch{width:48px;height:28px;border:0;border-radius:20px;background:#bac7c0;padding:3px;cursor:pointer}.switch:before{content:"";display:block;width:22px;height:22px;border-radius:50%;background:white;transition:.2s}.switch.on{background:#19a974}.switch.on:before{transform:translateX(-20px)}
+    .empty{padding:16px;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
+    .bottom{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:white;padding:7px 4px}.tab{border:0;background:transparent;color:var(--muted);padding:7px 2px;cursor:pointer;font-size:12px}.tab.active{color:var(--green)}
+    #browserFrame{display:none;width:100%;height:calc(100vh - 70px);border:0;background:white} 
+    @media(max-width:480px){.app{box-shadow:none}main{padding:13px}.grid{gap:6px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="searchbar">
+      <button class="icon" id="gameBtn" title="العودة للعبة">🎮</button>
+      <div class="address"><span>🔒</span><input id="address" value="بحث في الويب" aria-label="عنوان أو بحث"></div>
+      <button class="icon" id="go" title="بحث أو فتح">➜</button>
+    </header>
+    <iframe id="browserFrame" title="المتصفح"></iframe>
+    <main id="home">
+      <div class="hero"><h1>مرحبًا بك</h1><span class="status">● متصل</span></div>
+      <section class="section"><div class="head"><h2>اختصارات</h2><button class="link" id="addShortcut">+ إضافة</button></div><div class="grid" id="shortcuts">
+        <button class="site" data-url="https://www.youtube.com"><span class="site-icon">يو</span><span>YouTube</span></button>
+        <button class="site" data-url="https://www.google.com"><span class="site-icon">G</span><span>Google</span></button>
+        <button class="site" data-url="https://www.facebook.com"><span class="site-icon">ف</span><span>Facebook</span></button>
+        <button class="site" data-url="https://www.wikipedia.org"><span class="site-icon">W</span><span>Wikipedia</span></button>
+      </div></section>
+      <section class="section"><div class="head"><h2>التنزيلات</h2><button class="link" id="clearDownloads">مسح الكل</button></div><div id="downloads"><div class="empty">لا توجد تنزيلات نشطة</div></div></section>
+      <section class="section"><div class="head"><h2>توفير الإنترنت</h2></div><div class="saver"><div><strong>الوضع الاقتصادي</strong><div class="meta">ضغط البيانات ومنع الإعلانات</div></div><button class="switch on" id="saverSwitch" aria-label="توفير الإنترنت"></button></div></section>
+    </main>
+    <nav class="bottom"><button class="tab active" data-view="home">⌂<br>الرئيسية</button><button class="tab" data-view="tabs">▤<br>التبويبات</button><button class="tab" data-view="downloads">⬇<br>التنزيلات</button><button class="tab" data-view="more">⋮<br>المزيد</button></nav>
+  </div>
+  <script>
+    const address=document.getElementById('address'),home=document.getElementById('home'),frame=document.getElementById('browserFrame');
+    function navigate(value){let v=value.trim();if(!v)return;let u=/^https?:\/\//i.test(v)?v:/^[^\s]+\.[^\s]+$/.test(v)?'https://'+v:'https://www.google.com/search?q='+encodeURIComponent(v);address.value=u;home.style.display='none';frame.style.display='block';frame.src=u}
+    document.getElementById('go').onclick=()=>navigate(address.value);
+    address.addEventListener('keydown',e=>{if(e.key==='Enter')navigate(address.value)});
+    document.querySelectorAll('.site').forEach(b=>b.onclick=()=>navigate(b.dataset.url));
+    document.getElementById('gameBtn').onclick=()=>{if(history.length>1)history.back();else location.reload()};
+    document.getElementById('saverSwitch').onclick=e=>e.currentTarget.classList.toggle('on');
+    document.getElementById('addShortcut').onclick=()=>{const name=prompt('اسم الاختصار');if(!name)return;const url=prompt('رابط الاختصار');if(!url)return;const b=document.createElement('button');b.className='site';b.dataset.url=/^https?:\/\//i.test(url)?url:'https://'+url;b.innerHTML='<span class="site-icon">'+name.trim().charAt(0).toUpperCase()+'</span><span>'+name.replace(/[<>]/g,'')+'</span>';b.onclick=()=>navigate(b.dataset.url);document.getElementById('shortcuts').appendChild(b)};
+    document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');frame.style.display='none';home.style.display='block';if(t.dataset.view==='downloads')document.querySelector('#downloads').scrollIntoView({behavior:'smooth'})});
+  </script>
+</body>
+</html>
